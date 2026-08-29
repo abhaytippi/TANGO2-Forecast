@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test (py${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install
+        run: uv sync --extra dev --python ${{ matrix.python-version }}
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Format check
+        run: uv run ruff format --check src tests
+      - name: Type check
+        run: uv run mypy
+      - name: Test
+        run: uv run pytest --cov=tango2_forecast --cov-report=term-missing
+
+  reproduce:
+    name: reproduce published verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --extra dev
+      - name: Recompute the paper's Section 4 tables and beta*
+        run: uv run tango2-verify --realizations 120

@@ -1,0 +1,13 @@
+# Everything needed to run the web app (app.py) and the library.
+# PyCharm will offer to install these when you open the project.
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+pydantic>=2.6
+scikit-learn>=1.4
+plotly>=5.20
+streamlit>=1.33
+
+# Needed only to run the test suite.
+pytest>=8.0
+reportlab>=4.1

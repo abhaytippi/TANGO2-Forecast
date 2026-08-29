@@ -1,0 +1,105 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tango2-forecast"
+version = "0.1.0"
+description = "Open clinical decision support platform for TANGO2 deficiency disorder: baseline-phenotype identification and mechanistic crisis-risk modelling."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [{ name = "Abhay Tippimath" }]
+keywords = [
+    "rare-disease",
+    "TANGO2",
+    "clinical-decision-support",
+    "reaction-diffusion",
+    "human-phenotype-ontology",
+    "computational-biology",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+ml = ["scikit-learn>=1.4"]
+viz = ["plotly>=5.20"]
+app = ["streamlit>=1.33", "plotly>=5.20", "scikit-learn>=1.4"]
+reports = ["reportlab>=4.1", "pypdf>=4.2"]
+all = ["tango2-forecast[ml,viz,app,reports]"]
+dev = [
+    "tango2-forecast[all]",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "black>=24.3",
+    "mypy>=1.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/abhaytippimath/tango2-forecast"
+Documentation = "https://github.com/abhaytippimath/tango2-forecast#readme"
+Issues = "https://github.com/abhaytippimath/tango2-forecast/issues"
+
+[project.scripts]
+tango2-verify = "tango2_forecast.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tango2_forecast"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q --strict-markers"
+markers = ["slow: long-running reproduction tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM", "RUF", "D"]
+ignore = [
+    "D203",  # incompatible with D211
+    "D213",  # incompatible with D212
+    "N803",  # mathematical argument names (D, N) mirror the paper
+    "N806",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D101", "D102", "D103"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["tango2_forecast"]
+mypy_path = "src"
+strict = true
+warn_unreachable = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*", "sklearn.*", "plotly.*", "streamlit.*"]
+ignore_missing_imports = true
