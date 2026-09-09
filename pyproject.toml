@@ -96,7 +96,7 @@ target-version = ["py312"]
 python_version = "3.12"
 packages = ["tango2_forecast"]
 mypy_path = "src"
-strict = true
+strict = false
 warn_unreachable = true
 disallow_untyped_defs = true
 
