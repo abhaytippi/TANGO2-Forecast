@@ -101,5 +101,5 @@ warn_unreachable = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["scipy.*", "sklearn.*", "plotly.*", "streamlit.*"]
+module = ["scipy.*", "sklearn.*", "plotly.*", "streamlit.*", "reportlab.*", "pandas.*"]
 ignore_missing_imports = true
