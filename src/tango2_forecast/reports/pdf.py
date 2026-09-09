@@ -151,8 +151,9 @@ def _styles() -> dict[str, ParagraphStyle]:
         ),
     }
 
+from typing import Any  # <-- Add this import if 'Any' isn't imported yet
 
-def _callout(text: str, style: ParagraphStyle, background, border) -> Table:
+def _callout(text: str, style: ParagraphStyle, background: Any, border: Any) -> Table:
     """Build a bordered, filled block used for scope statements."""
     table = Table([[Paragraph(text, style)]], colWidths=[6.9 * inch])
     table.setStyle(
@@ -190,8 +191,7 @@ def _field_table(rows: list[tuple[str, str]]) -> Table:
     )
     return table
 
-
-def _page_furniture(canvas, doc) -> None:
+def _page_furniture(canvas: Any, doc: Any) -> None:
     """Header rule and footer on every page."""
     canvas.saveState()
     canvas.setStrokeColor(LINE)
