@@ -26,6 +26,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import pairwise
+from typing import Literal
 
 import numpy as np
 
@@ -72,7 +73,9 @@ def _final_field(
     return grid.x, result.field[-1]
 
 
-def _relative_l2(coarse_x: np.ndarray, coarse_r: np.ndarray, ref_x, ref_r) -> float:
+def _relative_l2(
+    coarse_x: np.ndarray, coarse_r: np.ndarray, ref_x: np.ndarray, ref_r: np.ndarray
+) -> float:
     """Relative L2 error after interpolating the coarse solution to the reference grid."""
     interpolated = np.interp(ref_x, coarse_x, coarse_r)
     return float(np.linalg.norm(interpolated - ref_r) / np.linalg.norm(ref_r))
@@ -92,7 +95,7 @@ def spatial_convergence(
     params: CrisisModelParameters | None = None,
     horizon_days: float = 100.0,
     dt_days: float = 0.5,
-    boundary: str = "one_sided",
+    boundary: Literal["one_sided", "mirrored"] = "one_sided",
 ) -> list[RefinementLevel]:
     """Spatial refinement study against a fine reference (paper, Table 2, left)."""
     params = params or CrisisModelParameters()
@@ -118,7 +121,7 @@ def temporal_convergence(
     params: CrisisModelParameters | None = None,
     n_nodes: int = 260,
     horizon_days: float = 100.0,
-    boundary: str = "one_sided",
+    boundary: Literal["one_sided", "mirrored"] = "one_sided",
 ) -> list[RefinementLevel]:
     """Temporal refinement study (paper, Table 2, right).
 
@@ -142,7 +145,11 @@ def temporal_convergence(
 
 
 def mass_conservation_drift(
-    *, n_nodes: int = 260, dt_days: float = 0.5, n_steps: int = 2000, boundary: str = "one_sided"
+    *,
+    n_nodes: int = 260,
+    dt_days: float = 0.5,
+    n_steps: int = 2000,
+    boundary: Literal["one_sided", "mirrored"] = "one_sided",
 ) -> float:
     """Relative drift of the spatial integral under pure diffusion.
 

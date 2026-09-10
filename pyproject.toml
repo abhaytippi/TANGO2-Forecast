@@ -49,6 +49,8 @@ dev = [
     "ruff>=0.4",
     "black>=24.3",
     "mypy>=1.9",
+    "pandas-stubs>=2.1",
+    "types-reportlab>=4.1",
 ]
 
 [project.urls]

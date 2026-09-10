@@ -256,7 +256,7 @@ class SyntheticCohort:
     @property
     def term_counts(self) -> np.ndarray:
         """Baseline term burden per patient, the input to the severity scale."""
-        return self.features.to_numpy().sum(axis=1)
+        return np.asarray(self.features.to_numpy().sum(axis=1))
 
 
 def _calibrated_intercepts(targets: np.ndarray, latent_scale: float) -> np.ndarray:
@@ -278,7 +278,7 @@ def _calibrated_intercepts(targets: np.ndarray, latent_scale: float) -> np.ndarr
     latent = nodes * latent_scale
 
     def marginal(intercept: np.ndarray) -> np.ndarray:
-        return _expit(intercept[:, None] + latent[None, :]) @ weights
+        return np.asarray(_expit(intercept[:, None] + latent[None, :]) @ weights)
 
     low = np.full(targets.shape, -20.0)
     high = np.full(targets.shape, 20.0)
@@ -287,16 +287,16 @@ def _calibrated_intercepts(targets: np.ndarray, latent_scale: float) -> np.ndarr
         too_high = marginal(mid) > targets
         high = np.where(too_high, mid, high)
         low = np.where(too_high, low, mid)
-    return 0.5 * (low + high)
+    return np.asarray(0.5 * (low + high))
 
 
 def _logit(p: np.ndarray) -> np.ndarray:
     p = np.clip(p, 1e-4, 1 - 1e-4)
-    return np.log(p / (1 - p))
+    return np.asarray(np.log(p / (1 - p)))
 
 
 def _expit(z: np.ndarray) -> np.ndarray:
-    return 1.0 / (1.0 + np.exp(-z))
+    return np.asarray(1.0 / (1.0 + np.exp(-z)))
 
 
 def generate_synthetic_cohort(

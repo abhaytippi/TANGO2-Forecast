@@ -81,7 +81,7 @@ class ForecastResult:
     @property
     def n_realizations(self) -> int:
         """Number of stochastic paths in this run."""
-        return self.peak_risk.shape[1]
+        return int(self.peak_risk.shape[1])
 
     @property
     def crisis_counts(self) -> np.ndarray:
@@ -100,7 +100,9 @@ class ForecastResult:
         """Fraction of realisations with no crisis inside the horizon."""
         return float(np.mean(self.crisis_counts == 0))
 
-    def peak_risk_quantiles(self, quantiles: Sequence[float] = (0.05, 0.25, 0.5, 0.75, 0.95)):
+    def peak_risk_quantiles(
+        self, quantiles: Sequence[float] = (0.05, 0.25, 0.5, 0.75, 0.95)
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Return ``(quantiles, values)`` of ``max_x r`` across realisations.
 
         ``values`` has shape ``(len(quantiles), n_steps + 1)`` and reproduces the
@@ -301,7 +303,7 @@ class IMEXCrisisSolver:
         Uses the quadrature the chosen boundary treatment actually conserves;
         see :attr:`GridSpec.quadrature_weights`.
         """
-        return self._weights @ r
+        return np.asarray(self._weights @ r)
 
     def _source_needs_rebuild(self, params: CrisisModelParameters) -> bool:
         return (

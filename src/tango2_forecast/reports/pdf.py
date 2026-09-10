@@ -14,12 +14,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from io import BytesIO
+from typing import Any
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
     HRFlowable,
     KeepTogether,
@@ -152,7 +154,9 @@ def _styles() -> dict[str, ParagraphStyle]:
     }
 
 
-def _callout(text: str, style: ParagraphStyle, background, border) -> Table:
+def _callout(
+    text: str, style: ParagraphStyle, background: colors.Color, border: colors.Color
+) -> Table:
     """Build a bordered, filled block used for scope statements."""
     table = Table([[Paragraph(text, style)]], colWidths=[6.9 * inch])
     table.setStyle(
@@ -191,7 +195,7 @@ def _field_table(rows: list[tuple[str, str]]) -> Table:
     return table
 
 
-def _page_furniture(canvas, doc) -> None:
+def _page_furniture(canvas: Canvas, doc: SimpleDocTemplate) -> None:
     """Header rule and footer on every page."""
     canvas.saveState()
     canvas.setStrokeColor(LINE)
@@ -225,7 +229,7 @@ def build_pdf(data: ReportData) -> bytes:
         author="TANGO2-Forecast",
     )
     s = _styles()
-    story: list = []
+    story: list[Any] = []
 
     # --- Header ---------------------------------------------------------
     story.append(Paragraph("TANGO2 Deficiency Assessment", s["title"]))

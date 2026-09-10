@@ -133,14 +133,14 @@ class TridiagonalOperator:
         ``rhs`` may have shape ``(N,)`` or ``(N, K)``; in the latter case ``K``
         independent systems are solved in a single LAPACK call.
         """
-        return solve_banded((1, 1), self.banded, rhs, check_finite=False)
+        return np.asarray(solve_banded((1, 1), self.banded, rhs, check_finite=False))
 
     def matvec(self, v: np.ndarray) -> np.ndarray:
         """Apply the matrix to ``v`` (shape ``(N,)``). Used for residual checks."""
         out = self.diag * v
         out[:-1] += self.upper * v[1:]
         out[1:] += self.lower * v[:-1]
-        return out
+        return np.asarray(out)
 
     def is_diagonally_dominant(self) -> bool:
         """Weak diagonal dominance: sufficient for stable Gaussian elimination."""

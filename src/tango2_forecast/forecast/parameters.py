@@ -219,7 +219,7 @@ class CrisisModelParameters(BaseModel):
         steady state, and is reported as such in the documentation.
         """
         gap = self.alpha - self.delta
-        return (gap + np.sqrt(gap**2 + 4.0 * self.alpha * self.beta)) / (2.0 * self.alpha)
+        return float((gap + np.sqrt(gap**2 + 4.0 * self.alpha * self.beta)) / (2.0 * self.alpha))
 
     def with_beta(self, beta: float) -> CrisisModelParameters:
         """Return a copy with a new source amplitude."""
