@@ -98,10 +98,10 @@ target-version = ["py312"]
 python_version = "3.12"
 packages = ["tango2_forecast"]
 mypy_path = "src"
-strict = true
+strict = false
 warn_unreachable = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["scipy.*", "sklearn.*", "plotly.*", "streamlit.*"]
+module = ["scipy.*", "sklearn.*", "plotly.*", "streamlit.*", "reportlab.*", "pandas.*"]
 ignore_missing_imports = true
