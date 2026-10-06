@@ -165,13 +165,14 @@ class CrisisModelParameters(BaseModel):
         default=0.13, ge=0.0, le=1.0, description="Uniform initial risk r(x, 0)."
     )
     r_rest: float = Field(
-        default=0.13,
+        default=0.0,
         ge=0.0,
         le=1.0,
         description=(
-            "Resting risk floor used by the post-crisis reset, Eq. (6). The "
-            "paper does not tabulate this separately; it is taken equal to the "
-            "initial condition r_0."
+            "Resting risk level used by the post-crisis reset, "
+            "r <- r_rest + kappa (r - r_rest). The paper uses r_rest = 0 "
+            "(Table 2). It does not affect beta_critical, which is defined "
+            "with the reset disabled."
         ),
     )
 
