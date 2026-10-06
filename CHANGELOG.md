@@ -6,6 +6,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed (IJSCAR final manuscript)
+
+- `r_rest` default changed from 0.13 to 0.0, matching Table 2 of the paper.
+  It does not affect the critical amplitude, which is defined with the reset
+  disabled.
+- `tango2-verify` now prints the final manuscript values as its reference
+  column.
+
+### Added
+
+- `paper/`: the exact solver and a single fixed seed script that regenerate
+  every PDE number and Figures 8 to 10 of the IJSCAR manuscript, with the
+  output of the reported run in `paper/results/pde_results.json`.
+
+
 ### Added — Module A, crisis forecast engine
 
 - `forecast.parameters`: Pydantic models for the reaction-diffusion parameters

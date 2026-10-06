@@ -401,35 +401,30 @@ spatial term is not decoration. It is what makes the mild patient possible.
 
 ## Verification against the paper
 
-The software recomputes the paper's numerical results from source rather than
-asserting them. Run `python main.py` to regenerate this table.
+**Exact manuscript numbers.** `python paper/reproduce_pde.py` regenerates every
+PDE number in the IJSCAR manuscript in one run with fixed seeds, and
+`python paper/make_figures.py` redraws Figures 8 to 10. See
+[`paper/README.md`](paper/README.md) for the expected output. The resting level
+used by the post crisis reset is `r_rest = 0`, as stated in Table 2 of the paper.
 
-| Check | Published | This implementation |
+| Result | Manuscript | `paper/reproduce_pde.py` |
 | --- | --- | --- |
-| Spatial convergence order | 1.05, 1.10, 1.23, 1.59 | 1.04, 1.10, 1.22, 1.58 |
-| Temporal convergence order | 1.05, 1.10, 1.22 | 1.05, 1.10, 1.22 |
-| Mass drift, pure diffusion | 1.4e-12 | 5.5e-12 |
+| Critical amplitude | 0.01273 | 0.01273 |
+| beta* with r* +20% / -20% | 0.0202 / 0.0065 | 0.0202 / 0.0065 |
+| High severity crises (200 realisations) | 4.79 +- 0.40 | 4.79 +- 0.40 |
+| Mild severity crises | 2.76 +- 0.43 | 2.76 +- 0.43 |
+| Crisis probability at beta = 0.0121 | 83 percent | 83 percent |
+| Scalar peak / scalar average / PDE | 26.9 to 40.9 / 0.0 to 1.4 / 0.8 to 5.0 | same |
+| Equal total source | 4.5, 4.0, 4.0, 3.4, 3.0 | same |
+| Synthetic recovery | r = 0.992, MAE 1.6e-4, 60/60 | same |
+| Elasticity r*, delta, x0, sigma_eta | -5.0, -2.9, 0.51, 0.06 | -5.05, -2.90, 0.51, 0.06 |
+| Temporal convergence orders | 1.01 to 1.10 | 1.01 to 1.10 |
+| Mass drift, pure diffusion | 1.3e-12 | 1.3e-12 |
 | von Neumann amplification | 1.000000 | 1.000000 |
-| Critical amplitude | 0.01273 | 0.012701 |
-| First crisis at high severity | day 229 plus or minus 7 | day 229 plus or minus 8 |
-| First crisis at mild severity | day 347 plus or minus 17 | day 346 plus or minus 18 |
-| Probability of a crisis below the critical amplitude | 0.83 | 0.82 |
-| Shift in critical amplitude, all eight parameters | 28.1, 16.3, -8.1, -9.0, 0.0, 2.4, -2.3, 0.0 | 28.14, 16.34, -8.12, -8.99, 0.00, 2.39, -2.30, 0.00 |
 
-Two notes recorded in the interest of accuracy rather than buried.
-
-**The critical amplitude differs by 0.23 percent.** Grid refinement drives this
-implementation to 0.012681, so the residual gap is a discretisation and bisection
-tolerance difference rather than a modelling one. For scale, the paper's own
-sensitivity analysis moves this quantity by 16 percent under a 10 percent change
-in the clearance rate.
-
-**Elasticities depend on which patient they describe.** The crisis count sits in
-the denominator of the elasticity definition, so a mildly affected patient has few
-crises for a perturbation to move. Measured here, the threshold elasticity runs
-from about -8.7 at the bottom of the calibrated range to -5.3 at the top. The
-published values are reproduced within Monte Carlo error at the top of the range,
-which is this implementation's documented default.
+**Interactive package.** `tango2-verify` recomputes the same checks with the
+package in `src/`, which uses its own grid (dx = 1/(N-1)) and seeds, so it agrees
+with the manuscript within Monte Carlo error rather than digit for digit.
 
 ---
 
@@ -604,12 +599,14 @@ interface misleads.
 If you use this software, please cite the underlying research.
 
 ```bibtex
-@unpublished{tippimath2025tango2,
-  author = {Tippimath, Abhay and Lalani, Seema R. and Liu, Zhandong},
-  title  = {A Hybrid Random Forest and Reaction Diffusion Framework for Early
-            Identification and Crisis Forecasting in TANGO2 Deficiency Disorder},
-  note   = {Preprint},
-  year   = {2025}
+@article{tippimath2026tango2,
+  author  = {Tippimath, Abhay},
+  title   = {Dynamic Mathematical PDE Modeling and Machine Learning for TANGO2
+             Identification and Crisis Prediction},
+  journal = {International Journal of Secondary Computing and Applications Research},
+  volume  = {1},
+  number  = {1},
+  year    = {2026}
 }
 ```
 
